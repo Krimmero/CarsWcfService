@@ -14,10 +14,14 @@ namespace CarsWcfService
     {
 
         [OperationContract]
-        string GetData(int value);
+        Car getCar(int id);
 
         [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
+        Car addCar(Car composite);
+
+        [OperationContract]
+
+        List<Car> GetCars();
 
         // TODO: Add your service operations here
     }
@@ -25,23 +29,58 @@ namespace CarsWcfService
 
     // Use a data contract as illustrated in the sample below to add composite types to service operations.
     [DataContract]
-    public class CompositeType
+    public class Car
     {
-        bool boolValue = true;
-        string stringValue = "Hello ";
+        private string _brand;
+        private string _model;
+        private string _color;
+        private float _engine;
+        private int _id;
 
         [DataMember]
-        public bool BoolValue
+        public string Color
         {
-            get { return boolValue; }
-            set { boolValue = value; }
+            get { return _color; }
+            set { _color = value; }
+        }
+
+
+        [DataMember]
+        public string Model
+        {
+            get { return _model; }
+            set { _model = value; }
         }
 
         [DataMember]
-        public string StringValue
+        public string Brand
         {
-            get { return stringValue; }
-            set { stringValue = value; }
+            get { return _brand; }
+            set { _brand = value; }
+        }
+
+        [DataMember]
+        public float Engine
+        {
+            get { return _engine; }
+            set { _engine = value; }
+        }
+
+        [DataMember
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        public enum Colors
+        {
+            [EnumMember]
+            Red,
+            [EnumMember]
+            Blue,
+            [EnumMember]
+            Black
         }
     }
 }
