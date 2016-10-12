@@ -21,7 +21,7 @@ namespace CarsWcfService
 
         [OperationContract]
 
-        List<Car> GetCars();
+        List<Car> getCars();
 
         // TODO: Add your service operations here
     }
@@ -33,12 +33,12 @@ namespace CarsWcfService
     {
         private string _brand;
         private string _model;
-        private string _color;
+        private Colors _color;
         private float _engine;
         private int _id;
 
         [DataMember]
-        public string Color
+        public Colors color
         {
             get { return _color; }
             set { _color = value; }
@@ -66,21 +66,24 @@ namespace CarsWcfService
             set { _engine = value; }
         }
 
-        [DataMember
+        [DataMember]
         public int Id
         {
             get { return _id; }
             set { _id = value; }
         }
 
-        public enum Colors
-        {
-            [EnumMember]
-            Red,
-            [EnumMember]
-            Blue,
-            [EnumMember]
-            Black
-        }
+     
+    }
+
+    [DataContract]
+    public enum Colors
+    {
+        [EnumMember]
+        Red,
+        [EnumMember]
+        Blue,
+        [EnumMember]
+        Black
     }
 }

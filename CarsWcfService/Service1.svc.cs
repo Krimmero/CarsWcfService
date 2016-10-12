@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Web.Configuration;
 
 namespace CarsWcfService
 {
@@ -21,19 +22,13 @@ namespace CarsWcfService
 
         public Car getCar(int id)
         {
-            SqlCommand cmd = new SqlCommand();
 
-            cmd.CommandType = CommandType.Text;
-            SqlDataReader reader = cmd.ExecuteReader();
-            reader.Read();
+            return null;
 
-
-            Car car = new Car();
-            car.Id = Convert.ToInt32(reader["Id"]).ToString());
-            car.Brand = reader["brand"].ToString();
-            car.Color = (Colors) Enum.Parse(typeof (Colors), reader["color"].ToString(), true);
         }
-       // return car
+        
+
+        
        
          
         public Car addCar(Car car)
@@ -43,13 +38,12 @@ namespace CarsWcfService
                 {
                     connection.Open();
 
-                    string sql =
-                        "INSERT INTO cars(Model, Brand, Color, Engine)OUTPUT Inserted.Id VALUES (@Model, @Brand, @Color, @Engine)";
+                    string sql = "INSERT INTO cars(Model, Brand, Color, Engine) OUTPUT Inserted.Id VALUES (@Model, @Brand, @Color, @Engine)";
                     SqlCommand cmd = new SqlCommand(sql, connection);
 
                     cmd.Parameters.AddWithValue("@Model", car.Model);
                     cmd.Parameters.AddWithValue("@Brand", car.Brand);
-                    cmd.Parameters.AddWithValue("@Color", car.Color);
+                    cmd.Parameters.AddWithValue("@Color", car.color);
                     cmd.Parameters.AddWithValue("@Engine", car.Engine);
                     cmd.CommandType = CommandType.Text;
                     //cmd.ExecuteNonQuery();
@@ -60,25 +54,29 @@ namespace CarsWcfService
             
         }
 
-        public List<Car> GetCars()
+        public List<Car> getCars()
         {
+            List<Car> cars = new List<Car>();
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-
-                string sql = "SELECT Id, Model, Brand, Color, Engine FROM cars";
+                string sql = "SELECT * FROM Cars";
                 SqlCommand cmd = new SqlCommand(sql, connection);
-                
+
                 cmd.CommandType = CommandType.Text;
-                cmd.ExecuteNonQuery();
-
-                List<Car> listOfCars = new List<Car>();
-
-                
-
-                
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    Car car = new Car();
+                    car.Id = Convert.ToInt32(reader["Id"].ToString());
+                    car.Model = reader["Model"].ToString();
+                    car.Brand = reader["Brand"].ToString();
+                    car.Engine = float.Parse(reader["Engine"].ToString());
+                    car.color = (Colors) Enum.Parse(typeof(Colors), reader["Color"].ToString(), true);
+                }
             }
-            return listOfCars;
+            return cars;
         }
     }
 }
